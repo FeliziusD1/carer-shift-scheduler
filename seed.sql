@@ -1,0 +1,61 @@
+INSERT INTO carers (first_name, last_name, carer_role, maximum_hours) VALUES 
+('John','Doe','carer', 30),
+('Kamran','Sinah','senior carer', 44),
+('Jessica','Paige','carer', 32),
+('Conner','Jackson','carer', 44),
+('Oliver','Benjamin','carer', 34),
+('Rhys','Doe','carer', 20),
+('Felix','Matti','senior carer', 40);
+
+INSERT INTO carer_availability (carer_id, carer_available_day, carer_start_time, carer_end_time) VALUES
+(1,'monday','07:00','15:00'),
+(1,'tuesday','07:00','15:00'),
+(1,'thursday','07:00','15:00'),
+(2,'monday','07:00','15:00'),
+(2,'tuesday','07:00','15:00'),
+(2,'wednesday','07:00','15:00'),
+(2,'friday','07:00','15:00'),
+(3,'monday','15:00','23:00'),
+(3,'wednesday','15:00','23:00'),
+(3,'thursday','15:00','23:00'),
+(3,'sunday','07:00','15:00'),
+(4,'monday','07:00','23:00'),
+(4,'tuesday','15:00','23:00'),
+(4,'thursday','07:00','23:00'),
+(4,'saturday','07:00','15:00'),
+(5,'tuesday','15:00','23:00'),
+(5,'wednesday','07:00','15:00'),
+(5,'friday','15:00','23:00'),
+(5,'sunday','15:00','23:00'),
+(6,'monday','07:00','15:00'),
+(6,'wednesday','07:00','15:00'),
+(7,'monday','15:00','23:00'),
+(7,'tuesday','15:00','23:00'),
+(7,'thursday','15:00','23:00'),
+(7,'friday','15:00','23:00'),
+(7,'saturday','07:00','15:00');
+
+INSERT INTO coverage_blocks (block_date, block_start_time, block_end_time, carers_required, senior_carer_required, block_label) VALUES
+('2026-11-02','07:00','15:00',3,TRUE,'morning'),
+('2026-11-02','15:00','23:00',2,FALSE,'night'),
+('2026-11-03','07:00','15:00',2,TRUE,'morning'),
+('2026-11-04','15:00','23:00',2,TRUE,'night'),
+('2026-11-05','07:00','15:00',2,TRUE,'morning'),
+('2026-11-06','07:00','15:00',1,TRUE,'morning'),
+('2026-11-07','15:00','23:00',2,FALSE,'night'),
+('2026-11-02','12:00','20:00',1,FALSE,NULL);
+
+INSERT INTO assignments (block_id, carer_id, assigned_start_time, assigned_end_time, manager_confirmed_overlap) VALUES
+(1,2,'07:00','15:00',FALSE),
+(1,1,'07:00','15:00',FALSE),
+(1,6,'07:00','15:00',FALSE),
+(2,3,'15:00','23:00',FALSE),
+(2,4,'15:00','23:00',FALSE),
+(3,2,'07:00','15:00',FALSE),
+(3,1,'07:00','15:00',FALSE),
+(4,3,'15:00','23:00',FALSE),
+(5,1,'07:00','15:00',FALSE),
+(5,4,'07:00','15:00',FALSE),
+(6,2,'07:00','15:00',FALSE),
+(7,7,'15:00','23:00',FALSE),
+(8,4,'12:00','20:00',TRUE);

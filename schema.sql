@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS assignments;
+DROP TABLE IF EXISTS coverage_blocks;
 DROP TABLE IF EXISTS carer_availability;
 DROP TABLE IF EXISTS carers;
 
@@ -18,16 +20,33 @@ CREATE TABLE carer_availability (
     UNIQUE(carer_id, carer_available_day, carer_start_time, carer_end_time)
 );
 
-/* 
-    -ON DELETE CASCADE means deleting a carer also deletes their availability rows. 
-    That makes sense if availability has no use without its carer.
+CREATE TABLE coverage_blocks (
+    block_id SERIAL PRIMARY KEY,
+    block_date DATE NOT NULL,
+    block_start_time TIME NOT NULL,
+    block_end_time TIME NOT NULL CHECK(block_end_time > block_start_time), 
+    carers_required INTEGER NOT NULL CHECK(carers_required > 0),
+    senior_carer_required BOOLEAN NOT NULL,
+    block_label VARCHAR(9) NULL CHECK(block_label IN ('morning', 'night'))
 
-    -You drop carer_availability before carers, which is the right order. Because of that, CASCADE on DROP TABLE carers isn't needed right now. 
-    What might it accidentally remove if you later add other tables that reference carers?
+);
 
-    -Your UNIQUE constraint blocks an exact duplicate slot for the same carer, but still allows overlapping slots. 
-    For example, Monday 08:00–16:00 and Monday 08:00–12:00 are both allowed.
+CREATE TABLE assignments (
+    assignment_id SERIAL PRIMARY KEY, 
+    block_id INTEGER NOT NULL REFERENCES coverage_blocks (block_id) ON DELETE CASCADE,
+    carer_id INTEGER NOT NULL REFERENCES carers (carer_id) ON DELETE RESTRICT,
+    assigned_start_time TIME NOT NULL,
+    assigned_end_time TIME NOT NULL CHECK(assigned_end_time > assigned_start_time),
+    manager_confirmed_overlap BOOLEAN NOT NULL DEFAULT FALSE
 
-    -The time check disallows overnight availability, such as 22:00–06:00. That's fine if you don't need overnight shifts yet.
+);
 
+/*
+    Notes
+    - carer_availability: deleted with its carer (ON DELETE CASCADE).
+    - assignments: deleting a carer is blocked (RESTRICT) to protect rota history;
+      deleting a block removes its assignments.
+    - Assigned times must fall within the block's times; enforced in the backend, not SQL.
+    - Overnight availability/blocks are not supported (end must be after start).
+    - Overlapping availability slots are not prevented by the UNIQUE constraint.
 */
