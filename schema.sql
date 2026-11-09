@@ -41,6 +41,7 @@ CREATE TABLE assignments (
 
 );
 
+
 /*
     Notes
     - carer_availability: deleted with its carer (ON DELETE CASCADE).

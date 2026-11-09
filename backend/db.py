@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Gets the values from the .env file  
+# os allows for scripts to access the operating system and read files 
+
 def get_connection():
     host = os.getenv("DB_HOST")
     port = os.getenv("DB_PORT")
