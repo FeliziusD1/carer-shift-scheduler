@@ -1,6 +1,8 @@
 import os 
+from typing import Any, cast
 import psycopg
 from dotenv import load_dotenv 
+from psycopg.rows import dict_row
 
 load_dotenv()
 
@@ -23,5 +25,6 @@ def get_connection():
         dbname=dbname,
         user=user,
         password=password,
+        row_factory=cast(Any, dict_row)
     )
     
