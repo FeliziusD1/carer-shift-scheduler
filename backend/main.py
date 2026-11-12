@@ -36,5 +36,14 @@ def list_assignments(block_id: int):
 
 # POST FUNCTION 
 @app.post("/assignments")
-def create_assignments():
-    pass
+def create_assignments(assignment: AssignmentCreate):
+    with get_connection() as connection:
+        rows = connection.execute(""" INSERT INTO assignments (block_id, carer_id, assigned_start_time, assigned_end_time) VALUES
+        (%s, %s, %s, %s) RETURNING *""", (
+            assignment.block_id,
+            assignment.carer_id,
+            assignment.assigned_start_time,
+            assignment.assigned_end_time,
+        )).fetchone()
+
+        return rows
